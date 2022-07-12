@@ -1,6 +1,7 @@
 <template>
   <div class="head">
     <div class="left">
+      <i class="el-icon-s-fold"></i>
       <tags-view></tags-view>
     </div>
     <div class="right">
@@ -48,9 +49,17 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 40px;
+  padding: 0 40px 0 0;
 }
 .right {
   display: flex;
+}
+.left {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+.el-icon-s-fold {
+  cursor: pointer;
 }
 </style>

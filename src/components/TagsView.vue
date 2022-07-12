@@ -3,7 +3,7 @@
     <el-tag
       v-for="(item, index) in tagsList"
       :key="index"
-      type="warning"
+      :type="$route.path === item.path ? 'danger' : 'warning'"
       closable
       @click="goPath(item.path)"
       @close="handleClose(tag)"
@@ -18,7 +18,9 @@
 export default {
   data() {
     return {
-      tagsList: []
+      tagsList: [],
+      newPath: '',
+      type: 'warning'
     }
   },
   created() {
@@ -31,6 +33,7 @@ export default {
     },
     // 路由跳转
     goPath(path) {
+      if (path === this.$route.path) return
       this.$router.push(path)
     },
     // 小查号关闭
@@ -46,5 +49,7 @@ export default {
 .el-tag {
   margin-left: 10px;
   cursor: pointer;
+  background-color: white;
+  border: 1px solid #f5a443;
 }
 </style>

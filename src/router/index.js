@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import { getItem } from '../utils/storage'
 Vue.use(VueRouter)
 
+const publicPath = []
 const routes = [
   {
     path: '/login',
