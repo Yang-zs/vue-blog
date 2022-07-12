@@ -31,7 +31,7 @@ const getNav = () => {
 
 const logout = () => {
   return request({
-    url: '/sys/logout',
+    url: '/logout',
     method: 'POST'
   })
 }

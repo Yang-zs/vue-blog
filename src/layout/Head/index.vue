@@ -1,6 +1,8 @@
 <template>
   <div class="head">
-    <div class="left">221</div>
+    <div class="left">
+      <tags-view></tags-view>
+    </div>
     <div class="right">
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
@@ -8,7 +10,7 @@
         </span>
         <template v-slot:dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="a">黄金糕</el-dropdown-item>
+            <el-dropdown-item command="a">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -17,8 +19,10 @@
 </template>
 
 <script>
+import TagsView from '@/components/TagsView.vue'
 import UsersApi from '../../api/login'
 export default {
+  components: { TagsView },
   data() {
     return {}
   },
@@ -28,6 +32,10 @@ export default {
       if (command === 'a') {
         await UsersApi.logout()
         this.$router.push('/login')
+        this.$message({
+          message: '退出成功',
+          type: 'success'
+        })
       }
     }
   }

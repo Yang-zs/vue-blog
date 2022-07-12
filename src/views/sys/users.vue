@@ -12,9 +12,9 @@
           <el-avatar src="avatar"></el-avatar>
         </el-table-column>
         <el-table-column align="center" prop="roles" label="角色">
-          <template #default="scope">
+          <!-- <template #default="scope">
             <el-tag>{{ scope.row.roles[0].name }}</el-tag>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column align="center" prop="email" label="邮箱">
         </el-table-column>
