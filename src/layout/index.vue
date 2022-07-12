@@ -3,18 +3,17 @@
     <sdie-menu></sdie-menu>
     <el-container>
       <el-header>Header</el-header>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
+      <app-main></app-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 import SdieMenu from '@/components/SdieMenu.vue'
+import AppMain from './AppMain.vue'
 
 export default {
-  components: { SdieMenu },
+  components: { SdieMenu, AppMain },
   data() {
     return {}
   },
@@ -38,6 +37,8 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
+  margin: 0;
+  /* padding: 0; */
 }
 
 .el-container {

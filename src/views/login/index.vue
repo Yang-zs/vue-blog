@@ -76,6 +76,11 @@ export default {
           )
           console.log(response, '登录')
           if (!response) return
+          this.$notify({
+            title: '成功',
+            message: '登录成功',
+            type: 'success'
+          })
           this.$router.push('/')
         } else {
           console.log('error submit!!')
@@ -90,7 +95,9 @@ export default {
       )
       this.ImgCode = captchaImg
       this.ruleForm.token = token
-    }
+    },
+    // 获取navList
+    async getNavList() {}
   }
 }
 </script>

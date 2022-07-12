@@ -1,6 +1,7 @@
 // 导入axios
 import axios from 'axios'
 import { getItem } from './storage'
+import loading from './loading'
 // 创建axios实例对象
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -10,6 +11,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
+    loading.open()
     const token = getItem('token')
     if (token) {
       console.log(token, token)
@@ -19,6 +21,7 @@ service.interceptors.request.use(
     return config
   },
   (error) => {
+    loading.close()
     return Promise.reject(error)
   }
 )
@@ -26,11 +29,13 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
+    loading.close()
     if (response.data.code === 200) {
       return response.data.data
     }
   },
   (error) => {
+    loading.close()
     return Promise.reject(error)
   }
 )

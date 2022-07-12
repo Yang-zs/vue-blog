@@ -4,7 +4,7 @@
       router
       default-active="2"
       class="el-menu-vertical-demo"
-      background-color="#545c64"
+      background-color="#1e2d32"
       text-color="#fff"
       active-text-color="#ffd04b"
     >
@@ -51,7 +51,7 @@ export default {
       navList: []
     }
   },
-  created() {
+  mounted() {
     this.getMenus()
   },
   methods: {
@@ -64,4 +64,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-menu {
+  border-right: 0;
+}
+</style>
