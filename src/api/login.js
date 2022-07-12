@@ -29,8 +29,16 @@ const getNav = () => {
   })
 }
 
+const logout = () => {
+  return request({
+    url: '/sys/logout',
+    method: 'POST'
+  })
+}
+
 export default {
   getCaptcha,
   login,
-  getNav
+  getNav,
+  logout
 }

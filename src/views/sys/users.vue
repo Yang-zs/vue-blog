@@ -3,13 +3,13 @@
     <breadcrumb></breadcrumb>
     <el-card>
       <!-- 表格 -->
-      <el-table border="true" :data="tableData" stripe style="width: 100%;">
+      <el-table :border="true" :data="tableData" stripe style="width: 100%;">
         <el-table-column align="center" type="index" label="序号">
         </el-table-column>
         <el-table-column align="center" prop="username" label="用户名">
         </el-table-column>
         <el-table-column align="center" prop="avatar" label="头像">
-          <el-avatar :src="avatar"></el-avatar>
+          <el-avatar src="avatar"></el-avatar>
         </el-table-column>
         <el-table-column align="center" prop="roles" label="角色">
           <template #default="scope">

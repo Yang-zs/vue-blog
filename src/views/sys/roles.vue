@@ -1,11 +1,14 @@
 <template>
   <div>
-    角色管理
+    <breadcrumb></breadcrumb>
   </div>
 </template>
 
 <script>
-export default {}
+import Breadcrumb from '@/components/Breadcrumb.vue'
+export default {
+  components: { Breadcrumb }
+}
 </script>
 
 <style scoped></style>

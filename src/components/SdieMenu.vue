@@ -10,7 +10,7 @@
     >
       <!-- 无children -->
       <template>
-        <div v-for="(item, index) in navList" :key="index">
+        <div v-for="item in navList" :key="item.icon">
           <el-menu-item
             v-if="item.children && item.children.length <= 0"
             :index="item.path"

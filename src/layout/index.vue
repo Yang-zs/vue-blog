@@ -2,7 +2,9 @@
   <el-container>
     <sdie-menu></sdie-menu>
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>
+        <Head></Head>
+      </el-header>
       <app-main></app-main>
     </el-container>
   </el-container>
@@ -11,9 +13,9 @@
 <script>
 import SdieMenu from '@/components/SdieMenu.vue'
 import AppMain from './AppMain.vue'
-
+import Head from './Head/index.vue'
 export default {
-  components: { SdieMenu, AppMain },
+  components: { SdieMenu, AppMain, Head },
   data() {
     return {}
   },
