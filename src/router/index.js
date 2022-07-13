@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { getItem } from '../utils/storage'
+import store from '../store/index'
 Vue.use(VueRouter)
 
 const publicPath = []
@@ -62,6 +63,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   const tokenStr = getItem('token')
   if (!tokenStr) return next('/login')
+  store.dispatch('user/getUSerInfo')
   next()
 })
 

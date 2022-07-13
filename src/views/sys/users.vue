@@ -84,16 +84,14 @@
       </el-table>
     </el-card>
     <!-- 弹框 -->
-    <el-dialog title="收货地址" v-model:visible="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+    <el-dialog title="新增用户" v-model:visible="dialogFormVisible">
+      <el-form :model="dialogForm">
+        <!-- 头像 -->
+        <el-form-item label="头像" :label-width="formLabelWidth">
+          <el-avatar :size="60" :src="dialogForm.avatar"></el-avatar>
         </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+        <el-form-item label="活动名称" :label-width="formLabelWidth">
+          <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div class="dialog-footer">
@@ -145,15 +143,10 @@ export default {
       ],
       dialogTableVisible: false,
       dialogFormVisible: false,
-      form: {
+      // dialog表单
+      dialogForm: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        avatar: ''
       },
       formLabelWidth: '120px'
     }
@@ -166,16 +159,16 @@ export default {
       const { records } = await UsersApi.getUserList(this.tableParameter)
       this.tableData = records
 
-      console.log(this.tableData, '32132')
+      // console.log(this.tableData, '32132')
     },
     handleEdit(index, row) {
-      console.log(index, row)
+      // console.log(index, row)
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      // console.log(index, row)
     },
     onSubmit() {
-      console.log('submit!')
+      // console.log('submit!')
     },
     // 搜索
     async onSearch() {
@@ -185,14 +178,14 @@ export default {
         username: this.formInlineUsername
       }
       const { records } = await UsersApi.getUserList(obj)
-      console.log(records, '搜索结果')
+      // console.log(records, '搜索结果')
       this.tableData = records
     }
   },
   watch: {
     formInlineUsername: {
       handler(value) {
-        console.log(value, '搜索框内容')
+        // console.log(value, '搜索框内容')
         if (value === '') {
           this.getUserList()
         }

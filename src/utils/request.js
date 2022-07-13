@@ -14,9 +14,9 @@ service.interceptors.request.use(
     loading.open()
     const token = getItem('token')
     if (token) {
-      console.log(token, token)
+      // console.log(token, token)
       config.headers.token = token
-      console.log(config)
+      // console.log(config)
     }
     return config
   },

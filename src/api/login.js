@@ -36,9 +36,17 @@ const logout = () => {
   })
 }
 
+const getUSerInfo = () => {
+  return request({
+    url: '/user/info',
+    method: 'GET'
+  })
+}
+
 export default {
   getCaptcha,
   login,
   getNav,
-  logout
+  logout,
+  getUSerInfo
 }
