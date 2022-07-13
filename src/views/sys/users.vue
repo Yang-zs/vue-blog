@@ -29,7 +29,13 @@
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="tableData" stripe style="width: 100%;">
+      <el-table
+        v-loading="loading"
+        :border="true"
+        :data="tableData"
+        stripe
+        style="width: 100%;"
+      >
         <el-table-column align="center" type="index" label="序号">
         </el-table-column>
         <el-table-column align="center" prop="username" label="用户名">
@@ -84,23 +90,59 @@
       </el-table>
     </el-card>
     <!-- 弹框 -->
-    <el-dialog title="新增用户" v-model:visible="dialogFormVisible">
-      <el-form :model="dialogForm">
-        <!-- 头像 -->
-        <el-form-item label="头像" :label-width="formLabelWidth">
-          <el-avatar :size="60" :src="dialogForm.avatar"></el-avatar>
-        </el-form-item>
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
+    <div class="dialog-box">
+      <el-dialog title="新增用户" v-model:visible="dialogFormVisible">
+        <el-form :model="dialogForm">
+          <!-- 头像 -->
+          <el-form-item label="头像" :label-width="formLabelWidth">
+            <el-avatar :size="60" :src="dialogForm.avatar"></el-avatar>
+          </el-form-item>
+          <!-- 用户名 -->
+          <el-form-item label="用户名" :label-width="formLabelWidth">
+            <el-input
+              v-model="dialogForm.username"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item label="密码" :label-width="formLabelWidth">
+            <el-input
+              type="password"
+              v-model="dialogForm.password"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <!-- 邮箱 -->
+          <el-form-item label="邮箱" :label-width="formLabelWidth">
+            <el-input v-model="dialogForm.email" autocomplete="off"></el-input>
+          </el-form-item>
+          <!-- 状态 -->
+          <el-form-item label="状态" :label-width="formLabelWidth">
+            <el-radio-group v-model="dialogForm.status">
+              <el-radio value="1" :label="1">启用</el-radio>
+              <el-radio value="2" :label="2">禁用</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addUserInfo">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    <!-- 分页 -->
+    <div class="pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="tableParameter.current"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="tableParameter.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -111,13 +153,27 @@ export default {
   components: { Breadcrumb },
   data() {
     return {
+      loading: false,
       formInline: {},
       formInlineUsername: '',
       tableData: [],
+      total: 10,
+
       tableParameter: {
-        current: '',
-        size: 20,
-        username: ''
+        current: 1,
+        size: 10,
+        username: '',
+        password: '',
+        createTime: ''
+      },
+      // dialog表单
+      dialogForm: {
+        avatar:
+          'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-8e360403-b17a-4c03-87b3-832ad7eb5fde/944e2483-68a2-47b6-b4fd-9e65f5a8c76d.jpg',
+        username: '',
+        email: '',
+        password: '',
+        status: 1
       },
       gridData: [
         {
@@ -143,29 +199,52 @@ export default {
       ],
       dialogTableVisible: false,
       dialogFormVisible: false,
-      // dialog表单
-      dialogForm: {
-        name: '',
-        avatar: ''
-      },
-      formLabelWidth: '120px'
+
+      formLabelWidth: '60px'
     }
   },
   created() {
     this.getUserList()
   },
   methods: {
+    // 分页
+    handleSizeChange(val) {
+      this.tableParameter.size = val
+      this.getUserList()
+      console.log(1212)
+    },
+    handleCurrentChange(val) {
+      this.tableParameter.current = val
+      this.getUserList()
+      console.log(1313)
+    },
+    // 添加用户数据
+    async addUserInfo() {
+      const response = await UsersApi.addUserInfo(this.dialogForm)
+      // console.log(response, '添加结果.vue')
+      this.getUserList()
+      this.dialogFormVisible = false
+    },
+    // 获取列表数据
     async getUserList() {
-      const { records } = await UsersApi.getUserList(this.tableParameter)
+      const { code, records, size, pages, total } = await UsersApi.getUserList(
+        this.tableParameter
+      )
       this.tableData = records
-
-      // console.log(this.tableData, '32132')
+      this.total = total
+      this.size = size
+      if (code === 200) this.loading = false
     },
     handleEdit(index, row) {
-      // console.log(index, row)
+      console.log(index, row)
+      this.dialogForm = row
+      this.dialogFormVisible = true
     },
-    handleDelete(index, row) {
-      // console.log(index, row)
+    async handleDelete(index, row) {
+      console.log(index, row)
+      const res = await UsersApi.removeUser(row.id)
+      console.log(res, '删除结果')
+      this.getUserList()
     },
     onSubmit() {
       // console.log('submit!')
@@ -209,5 +288,42 @@ export default {
 .addbtn {
   width: 90px;
   height: 40px;
+}
+.el-dialog {
+  width: 455px;
+  height: 466px;
+}
+.el-input {
+  width: 100%;
+  height: 100%;
+}
+.el-form-item {
+  width: 335px;
+  height: 40px;
+}
+.el-form {
+  width: 350px;
+  margin: 0;
+  padding: 0;
+}
+.el-dialog__bodyg {
+  width: 360px;
+  padding: 0;
+}
+.el-dialog__header {
+  width: 360px;
+  padding: 0;
+}
+.el-dialog {
+  width: 360px;
+  padding: 0;
+}
+.dialog-box {
+  width: 100px;
+}
+.pages {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

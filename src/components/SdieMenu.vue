@@ -16,7 +16,7 @@
             v-if="item.children && item.children.length <= 0"
             :index="item.path"
           >
-            <i class="el-icon-setting"></i>
+            <i :class="item.icon"></i>
             <span>{{ item.label }}</span>
           </el-menu-item>
         </fragment>
@@ -29,11 +29,14 @@
           :index="item.path"
         >
           <template #title>
-            <i class="el-icon-location"></i>
+            <i :class="item.icon"></i>
             <span>{{ item.label }}</span>
           </template>
           <el-menu-item-group v-for="(ite, ind) in item.children" :key="ind">
-            <el-menu-item :index="ite.path">{{ ite.label }}</el-menu-item>
+            <el-menu-item :index="ite.path">
+              <i :class="ite.icon"></i>
+              {{ ite.label }}</el-menu-item
+            >
           </el-menu-item-group>
         </el-submenu>
       </fragment>

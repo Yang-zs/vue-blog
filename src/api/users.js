@@ -9,7 +9,16 @@ const getUserList = (data) => {
 // 用户列表添加
 const addUserInfo = (data) => {
   return request({
-    url: '/sys/user/add',
+    url: '/user/add',
+    method: 'POST',
+    data
+  })
+}
+
+// 删除用户
+const removeUser = (data) => {
+  return request({
+    url: '/user/del',
     method: 'POST',
     data
   })
@@ -17,5 +26,6 @@ const addUserInfo = (data) => {
 
 export default {
   getUserList,
-  addUserInfo
+  addUserInfo,
+  removeUser
 }

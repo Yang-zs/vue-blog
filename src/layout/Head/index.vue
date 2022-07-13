@@ -23,7 +23,9 @@
           <i class="el-icon-circle-close"></i>
         </el-tooltip>
       </div>
-      <span>头像</span>
+      <span>
+        <el-avatar :size="40" :src="$store.getters.userInfo.avatar"></el-avatar>
+      </span>
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
