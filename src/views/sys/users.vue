@@ -7,7 +7,8 @@
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="用户名">
             <el-input
-              v-model="formInline.username"
+              clearable
+              v-model="formInlineUsername"
               placeholder="请输入用户名"
             ></el-input>
           </el-form-item>
@@ -112,13 +113,12 @@ export default {
   components: { Breadcrumb },
   data() {
     return {
+      formInline: {},
+      formInlineUsername: '',
       tableData: [],
       tableParameter: {
         current: '',
         size: 20,
-        username: ''
-      },
-      formInline: {
         username: ''
       },
       gridData: [
@@ -178,14 +178,25 @@ export default {
       console.log('submit!')
     },
     // 搜索
-    onSearch() {
+    async onSearch() {
       const obj = {
         current: 1,
         size: 20,
-        username: this.formInline.username
+        username: this.formInlineUsername
       }
-      const { records } = UsersApi.getUserList(obj)
+      const { records } = await UsersApi.getUserList(obj)
+      console.log(records, '搜索结果')
       this.tableData = records
+    }
+  },
+  watch: {
+    formInlineUsername: {
+      handler(value) {
+        console.log(value, '搜索框内容')
+        if (value === '') {
+          this.getUserList()
+        }
+      }
     }
   }
 }

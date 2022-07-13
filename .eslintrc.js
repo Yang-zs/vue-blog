@@ -13,7 +13,8 @@ module.exports = {
     'no-unused-vars': ['error', { varsIgnorePattern: '.*', args: 'none' }],
     'space-before-function-paren': 'off',
     'no-tabs': 'warn',
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'eslint-plugin-vue': 'off'
   },
   overrides: [
     {

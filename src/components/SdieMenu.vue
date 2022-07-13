@@ -10,7 +10,7 @@
     >
       <!-- 无children -->
       <template>
-        <div v-for="item in navList" :key="item.icon">
+        <div v-for="(item, i) in navList" :key="i">
           <el-menu-item
             v-if="item.children && item.children.length <= 0"
             :index="item.path"
@@ -41,11 +41,8 @@
 </template>
 
 <script>
-// import SdieMenu from '@/components/SdieMenu.vue'
 import { getItem } from '../utils/storage'
 export default {
-  // components: { SdieMenu },
-  // name: 'SdieMenu',
   data() {
     return {
       navList: []
