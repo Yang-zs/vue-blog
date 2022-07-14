@@ -1,6 +1,5 @@
 <template>
   <div class="users">
-    <breadcrumb></breadcrumb>
     <el-card>
       <!-- 搜索 -->
       <div class="search-form">
@@ -23,7 +22,7 @@
           icon="el-icon-plus"
           class="addbtn"
           type="primary"
-          @click="dialogFormVisible = true"
+          @click="addDialog"
           >新增</el-button
         >
       </div>
@@ -36,7 +35,7 @@
         stripe
         style="width: 100%;"
       >
-        <el-table-column align="center" type="index" label="序号">
+        <el-table-column align="center" width="100px" type="index" label="序号">
         </el-table-column>
         <el-table-column align="center" prop="username" label="用户名">
         </el-table-column>
@@ -69,7 +68,7 @@
           </template>
         </el-table-column>
         <el-table-column align="center" label="操作" width="260px">
-          <template #default="scope">
+          <template v-slot="scope">
             <el-button
               size="mini"
               @click="handleEdit(scope.$index, scope.row)"
@@ -77,12 +76,26 @@
               plain
               >编辑</el-button
             >
-            <el-button type="warning" size="mini" plain>分配权限</el-button>
+            <el-button
+              type="warning"
+              @click="handleOpenRoleDialog(scope.row)"
+              size="mini"
+              plain
+              :disabled="
+                scope.row.roles.length === 1 &&
+                scope.row.roles[0].code === 'admin'
+              "
+              >分配权限</el-button
+            >
             <el-button
               size="mini"
               type="danger"
               plain
               @click="handleDelete(scope.$index, scope.row)"
+              :disabled="
+                scope.row.roles.length === 1 &&
+                scope.row.roles[0].code === 'admin'
+              "
               >删除</el-button
             >
           </template>
@@ -126,7 +139,7 @@
         </el-form>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addUserInfo">确 定</el-button>
+          <el-button type="primary" @click="addOrEdit">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -136,23 +149,58 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="tableParameter.current"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[5, 7, 9, 10]"
         :page-size="tableParameter.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       >
       </el-pagination>
     </div>
+    <!-- 分配权限 -->
+    <el-dialog
+      width="30%"
+      center
+      title="分配角色"
+      v-model:visible="roleDialogFormVisible"
+    >
+      <el-form
+        :model="roleForm"
+        :rules="roleRules"
+        ref="roleDialogForm"
+        label-width="60px"
+      >
+        <el-form-item label="角色" prop="roleId">
+          <el-select
+            style="width: 100%;"
+            multiple
+            v-model="roleForm.roleId"
+            placeholder="请选择角色"
+          >
+            <el-option
+              v-for="(item, index) in roleList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div class="dialog-footer">
+        <el-button @click="roleDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSubmitRole">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import UsersApi from '../../api/users'
-import Breadcrumb from '@/components/Breadcrumb.vue'
+
+import RoleManagerApi from '@/api/role-manager'
 export default {
-  components: { Breadcrumb },
   data() {
     return {
+      orr: true,
       loading: false,
       formInline: {},
       formInlineUsername: '',
@@ -165,6 +213,14 @@ export default {
         username: '',
         password: '',
         createTime: ''
+      },
+      roleList: [],
+      roleId: '',
+      roleForm: {
+        roleId: []
+      },
+      roleRules: {
+        roleId: [{ required: true, message: '请选择角色', trigger: 'change' }]
       },
       // dialog表单
       dialogForm: {
@@ -197,16 +253,77 @@ export default {
           address: '上海市普陀区金沙江路 1518 弄'
         }
       ],
+      // 分配权限表单
       dialogTableVisible: false,
       dialogFormVisible: false,
-
+      roleDialogFormVisible: false,
       formLabelWidth: '60px'
     }
   },
   created() {
     this.getUserList()
+    this.handleGetRoleList()
   },
   methods: {
+    handleOpenRoleDialog(row) {
+      this.roleForm.roleId = []
+      this.roleDialogFormVisible = true
+      row.roles.forEach((item) => {
+        this.roleForm.roleId.push(item.id)
+      })
+      this.roleId = row.id
+      console.log(this.roleForm.roleId)
+    },
+    handleSubmitRole() {
+      console.log(11)
+      this.$refs.roleDialogForm.validate(async (valid) => {
+        console.log(2)
+        if (valid) {
+          const response = await RoleManagerApi.updateRole(
+            this.roleId,
+            this.roleForm.roleId
+          )
+          this.roleDialogFormVisible = false
+          this.$notify({ title: '提示', message: '更新成功', type: 'success' })
+          this.getUserList()
+          console.log(response)
+        }
+      })
+    },
+    async handleGetRoleList() {
+      try {
+        const data = { current: this.current, size: this.size }
+        const { records } = await UsersApi.getRoleList(data)
+        this.roleList = records
+        console.log(this.roleList, 'role')
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    // 分配权限
+    addDialog() {
+      this.orr = true
+      this.dialogFormVisible = true
+    },
+    addOrEdit() {
+      if (this.orr === true) {
+        this.addUserInfo()
+      } else {
+        this.addEdit()
+      }
+    },
+    async addEdit() {
+      const res = UsersApi.updataUserInfo(this.dialogForm)
+      console.log(res, '修改状态')
+      if (res) {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.dialogFormVisible = false
+        this.getUserList()
+      }
+    },
     // 分页
     handleSizeChange(val) {
       this.tableParameter.size = val
@@ -235,11 +352,16 @@ export default {
       this.size = size
       if (code === 200) this.loading = false
     },
-    handleEdit(index, row) {
+    // 编辑
+    async handleEdit(index, row) {
+      this.orr = false
       console.log(index, row)
-      this.dialogForm = row
       this.dialogFormVisible = true
+      const res = await UsersApi.getAloneUserInfo(row.id)
+      console.log(res, '获取单个用户信息')
+      this.dialogForm = res
     },
+
     async handleDelete(index, row) {
       console.log(index, row)
       const res = await UsersApi.removeUser(row.id)

@@ -23,9 +23,44 @@ const removeUser = (data) => {
     data
   })
 }
+// 获取单个用户信息
+const getAloneUserInfo = (id) => {
+  return request({
+    url: `user/userInfo/${id}`,
+    method: 'GET'
+  })
+}
+// 更新用户信息
+const updataUserInfo = (data) => {
+  return request({
+    url: '/user/update',
+    method: 'PUT',
+    data
+  })
+}
+// 分配权限
+const updateRole = (id, data) => {
+  return request({
+    url: `/user/assign/${id}`,
+    method: 'POST',
+    data
+  })
+}
+// 获取角色列表
+const getRoleList = (data) => {
+  return request({
+    url: '/role/list',
+    method: 'GET',
+    data
+  })
+}
 
 export default {
   getUserList,
   addUserInfo,
-  removeUser
+  removeUser,
+  getAloneUserInfo,
+  updataUserInfo,
+  updateRole,
+  getRoleList
 }

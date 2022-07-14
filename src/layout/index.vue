@@ -5,7 +5,10 @@
       <el-header>
         <Head></Head>
       </el-header>
-      <app-main></app-main>
+      <div>
+        <breadcrumb></breadcrumb>
+      </div>
+      <app-main> </app-main>
     </el-container>
   </el-container>
 </template>
@@ -14,8 +17,9 @@
 import SdieMenu from '@/components/SdieMenu.vue'
 import AppMain from './AppMain.vue'
 import Head from './Head/index.vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
 export default {
-  components: { SdieMenu, AppMain, Head },
+  components: { SdieMenu, AppMain, Head, Breadcrumb },
   data() {
     return {}
   },

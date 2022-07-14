@@ -45,11 +45,12 @@ export default {
       console.log(res, '用户信息')
       if (!res) return
       commit('setUserInfo', res)
-    },
-    async addUserInfo({ commit }, addForm) {
-      const response = UserApi.getUSerInfo(addForm)
-      console.log(response, '添加结果')
-      return response
     }
+    // 添加用户数据
+    // async addUserInfo({ commit }, addForm) {
+    //   const response = UserApi.getUSerInfo(addForm)
+    //   console.log(response, '添加结果')
+    //   return response
+    // }
   }
 }
