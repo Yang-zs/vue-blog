@@ -104,7 +104,7 @@
     </el-card>
     <!-- 弹框 -->
     <div class="dialog-box">
-      <el-dialog title="新增用户" v-model:visible="dialogFormVisible">
+      <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
         <el-form :model="dialogForm">
           <!-- 头像 -->
           <el-form-item label="头像" :label-width="formLabelWidth">
@@ -161,7 +161,7 @@
       width="30%"
       center
       title="分配角色"
-      v-model:visible="roleDialogFormVisible"
+      :visible.sync="dialogFormVisible"
     >
       <el-form
         :model="roleForm"

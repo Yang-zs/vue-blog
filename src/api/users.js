@@ -54,6 +54,16 @@ const getRoleList = (data) => {
     data
   })
 }
+/**
+ * 获取用户权限接口
+ * @returns {AxiosPromise}
+ */
+const getPermissionList = () => {
+  return request({
+    url: '/menu/nav',
+    method: 'GET'
+  })
+}
 
 export default {
   getUserList,

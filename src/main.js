@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Fragment from 'vue-fragment'
 
 Vue.config.productionTip = false
-
+import '@/directive/permission'
 Vue.use(ElementUI)
 Vue.use(Fragment.Plugin)
 new Vue({

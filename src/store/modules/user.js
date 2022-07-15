@@ -6,7 +6,8 @@ export default {
   state: {
     token: getItem('token') || '',
     navList: getItem('menus') || [],
-    userInfo: getItem('userInfo') || {}
+    userInfo: getItem('userInfo') || {},
+    permission: (state) => state.user.permission
   },
   mutations: {
     setToken(state, token) {
@@ -20,9 +21,22 @@ export default {
     setUserInfo(state, userInfo) {
       state.userInfo = userInfo
       setItem('userInfo', state.userInfo)
+    },
+    setPermission(state, permission) {
+      state.permission = permission
     }
   },
   actions: {
+    async getPermission({ commit }) {
+      const { authoritys, menus } = await UserApi.getPermissionList()
+      if (authoritys.length > 0 && menus.length > 0) {
+        commit('setPermission', authoritys)
+        commit('setMenus', menus)
+        return { authoritys, menus }
+      } else {
+        return false
+      }
+    },
     // 验证码
     async getCaptcha() {
       const { captchaImg, token } = await LoginApi.getCaptcha()
